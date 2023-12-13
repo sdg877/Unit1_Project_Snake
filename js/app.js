@@ -3,8 +3,7 @@ function init() {
     //! ELEMENTS
     let grid = document.querySelector('.grid') // create grid
     
-    // play again button
-    // let playAgain = document.querySelector(".playAgain")
+    const playAgainButton = document.querySelector(".playAgain")
     
     //! VARIABLES
     // board config
@@ -16,8 +15,36 @@ function init() {
     let gameRunning = false
     const startingPosition = 2   //character config
     let currentPosition = startingPosition
+    let highScore = localStorage.getItem('snakeHighScore') || 0
+    const highScoreElement = document.getElementById('highScore')
+    highScoreElement.textContent = highScore
+    let snakeSpeed = 500
     
     //! FUNCTIONS
+    function updateHighScore(score) { // highscore
+        if (score > highScore) {
+            highScore = score
+            localStorage.setItem('snakeHighScore' , highScore)
+            highScoreElement.textContent = highScore
+        }
+    }
+
+    function resetGame() { // resetting game after pressing play again button
+        snake = [0 ,1]
+        direction = "right"
+        currentPosition = startingPosition
+        snakeSpeed = 500
+        gameRunning = false
+
+        cells.forEach(cell => {
+            cell.remove()
+        })
+        cells = []
+        createGrid()
+
+        document.addEventListener('keyup', handleMovement)
+    }
+
     function startGame() {
         gameRunning = true
         moveSnake()
@@ -25,9 +52,9 @@ function init() {
 
     function stopGame() {
         gameRunning = false
+        const currentScore = snake.length - 2
+        updateHighScore(currentScore)
     }
-
-    let snakeSpeed = 500
 
     function moveSnake() {
         if (!gameRunning) return
@@ -47,7 +74,8 @@ function init() {
 
         if (snake.includes(newPosition) || newPosition < 0 || newPosition >= cellCount) {
             stopGame()
-            alert("Game over - you lose!")
+            alert("GAME OVER - YOU LOSE!!")
+            document.removeEventListener('keyup', handleMovement)
             return
         }
       
@@ -61,6 +89,9 @@ function init() {
             cells[currentPosition].classList.add('snake')
 
             snakeSpeed -= 25
+            if (snakeSpeed < 250) {
+                snakeSpeed = 250
+            }
         }
     
         setTimeout(moveSnake, snakeSpeed)
@@ -114,8 +145,8 @@ function init() {
 
     function checkBoundaries() {
         if(snake.length !== new Set(snake).size) {
-           alert("You lose")
-        } 
+            //alert("Game over - you lose!")
+        }
     }
     
     // handle movement
@@ -159,6 +190,7 @@ function init() {
     
     //! EVENTS
     document.addEventListener('keyup', handleMovement)
+    playAgainButton.addEventListener('click', resetGame)
     
     //! PAGE LOAD
     createGrid()
