@@ -6,7 +6,6 @@ function init() {
     // play again button
     // let playAgain = document.querySelector(".playAgain")
     
-    
     //! VARIABLES
     // board config
     const width = 15
@@ -14,13 +13,55 @@ function init() {
     const cellCount = width * height
     let cells = []
     let direction = "right"
-    
-    //character config
-    const startingPosition = 2
+    let gameRunning = false
+    const startingPosition = 2   //character config
     let currentPosition = startingPosition
     
     //! FUNCTIONS
+    function startGame() {
+        gameRunning = true
+        moveSnake()
+    }
+
+    function stopGame() {
+        gameRunning = false
+    }
+
+    function moveSnake() {
+        if (!gameRunning) return
+
+        removeSnake()
+
+        let newPosition = currentPosition
+        if (direction === "up" && currentPosition >= width) {
+            newPosition -= width
+        } else if (direction === "down" && currentPosition + width <= cellCount - 1) {
+            newPosition += width
+        } else if (direction === "left" && currentPosition % width !== 0) {
+            newPosition--
+        } else if (direction === "right" && currentPosition % width !== width - 1) {
+            newPosition++
+        }
+
+        if (snake.includes(newPosition) || newPosition < 0 || newPosition >= cellCount) {
+            stopGame()
+            alert("Game over - you lose!")
+            return
+        }
+      
+        currentPosition = newPosition
+        addSnake(currentPosition)
+
+        if (currentPosition === applePosition) {
+            cells[applePosition].classList.remove('apple')
+            placeApple(generateRandomPosition())
+            snake.unshift(currentPosition)
+            cells[currentPosition].classList.add('snake')
+        }
     
+        setTimeout(moveSnake, 500)
+    }
+
     let applePosition = -1
     let snake = [0, 1] // store snake position as an array
     
@@ -30,6 +71,7 @@ function init() {
             placeApple(newNumber)
             return
         }
+
         cells[position].classList.add('apple')
         applePosition = position
     }
@@ -49,9 +91,9 @@ function init() {
             cells.push(cell) // add newly created div to cell to cells array
         }
     
-    placeApple(generateRandomPosition()) // call place apple function
+        placeApple(generateRandomPosition()) // call place apple function
     
-    addSnake(startingPosition) // add snake to starting position
+        addSnake(startingPosition) // add snake to starting position
     }
     
     function addSnake(position) {
@@ -82,11 +124,8 @@ function init() {
         const left = "ArrowLeft"
         const right = "ArrowRight"
     
-    // remove snake from previous position before updating
-    removeSnake()
-    
-    let newPosition = currentPosition
-    
+        removeSnake()  // remove snake from previous position before updating
+
         // check which key was pressed 
         if (key === up && currentPosition >= width) {
             direction = "up"
@@ -101,25 +140,26 @@ function init() {
             direction = "right"
             currentPosition++
         }
-    
+
         addSnake(currentPosition)
         checkBoundaries()
 
-    if (currentPosition === applePosition) {
-        cells[applePosition].classList.remove('apple')
-        placeApple(generateRandomPosition())
-        snake.unshift(currentPosition)
-        cells[currentPosition].classList.add('snake')
-    }
+        if (currentPosition === applePosition) {
+            cells[applePosition].classList.remove('apple')
+            placeApple(generateRandomPosition())
+            snake.unshift(currentPosition)
+            cells[currentPosition].classList.add('snake')
     }   
+    if (!gameRunning) {
+        startGame()
+    }
+}
     
     //! EVENTS
     document.addEventListener('keyup', handleMovement)
     
-    
     //! PAGE LOAD
     createGrid()
     }
-    
     
     window.addEventListener('DOMContentLoaded', init)
