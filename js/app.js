@@ -27,6 +27,8 @@ function init() {
         gameRunning = false
     }
 
+    let snakeSpeed = 500
+
     function moveSnake() {
         if (!gameRunning) return
 
@@ -57,9 +59,11 @@ function init() {
             placeApple(generateRandomPosition())
             snake.unshift(currentPosition)
             cells[currentPosition].classList.add('snake')
+
+            snakeSpeed -= 25
         }
     
-        setTimeout(moveSnake, 500)
+        setTimeout(moveSnake, snakeSpeed)
     }
 
     let applePosition = -1
@@ -83,7 +87,6 @@ function init() {
     function createGrid(){
         for (let i = 0; i < cellCount; i++){  // use cell count to create grid cells
             const cell = document.createElement('div')  //create cell div
-            // cell.innerText = i // add index to div element
             cell.dataset.index = i  // add index as attribute
             cell.style.height = `${100 / height}%`  // add height and width to each grid cell (div)
             cell.style.width = `${100 / width}%`
@@ -92,7 +95,6 @@ function init() {
         }
     
         placeApple(generateRandomPosition()) // call place apple function
-    
         addSnake(startingPosition) // add snake to starting position
     }
     
