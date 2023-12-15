@@ -229,7 +229,7 @@ function init() {
     setTimeout(displayStartMessage, 100)
     }
     
-    window.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
         init()
 
         document.querySelector(".close").addEventListener("click", closeModal)
