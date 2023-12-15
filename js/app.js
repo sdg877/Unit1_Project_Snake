@@ -8,6 +8,9 @@ function init() {
     let crunchSoundAudio = document.querySelector('#crunchSound')
     crunchSoundAudio.src = './assets/apple.mp3'
 
+    let gameOverAudio = document.querySelector('#gameOver')
+    gameOverAudio.src ='./assets/gameOver.mp3'
+
     //! VARIABLES
     // board config
     const width = 15
@@ -66,6 +69,7 @@ function init() {
             cells[cell].classList.remove('snake')
             cells[cell].classList.add('dead')
         })
+        gameOverAudio.play()
     }
 
     function moveSnake() {
@@ -86,7 +90,7 @@ function init() {
 
         if (snake.includes(newPosition) || newPosition < 0 || newPosition >= cellCount) {
             stopGame()
-            alert("GAME OVER - YOU LOSE!!")
+            // alert("GAME OVER - YOU LOSE!!")
             document.removeEventListener('keyup', handleMovement)
             const currentScore = snake.length
             updateHighScore(currentScore)
@@ -107,10 +111,7 @@ function init() {
             if (snakeSpeed < 250) {
                 snakeSpeed = 250
             }
-        
-            
         }
-    
         setTimeout(moveSnake, snakeSpeed)
     }
 
@@ -163,7 +164,6 @@ function init() {
 
     function checkBoundaries() {
         if(snake.length !== new Set(snake).size) {
-            alert("Game over - you lose!")
         }
     }
     

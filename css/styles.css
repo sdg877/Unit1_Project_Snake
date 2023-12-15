@@ -68,7 +68,6 @@
     border: 2px solid slategray;
   }
 
-  #soundTrigger {
-    position: absolute;
-    left: -9999px;
-  }
+.playAgain {
+  cursor: pointer;
+}
