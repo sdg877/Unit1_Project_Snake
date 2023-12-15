@@ -1,9 +1,11 @@
 function displayStartMessage() {
     document.getElementById("myModal").style.display = "block"
+    document.querySelector(".modal-content").style.display = "block"
 }
 
 function closeModal() {
     document.getElementById("myModal").style.display = "none"
+    document.querySelector(".modal-content").style.display = "none"
 }
 
 function init() {
