@@ -1,3 +1,11 @@
+function displayStartMessage() {
+    document.getElementById("myModal").style.display = "block"
+}
+
+function closeModal() {
+    document.getElementById("myModal").style.display = "none"
+}
+
 function init() {
 
     //! ELEMENTS
@@ -26,9 +34,13 @@ function init() {
     highScoreElement.textContent = highScore
     let snakeSpeed = 500
     
- 
-
     //! FUNCTIONS
+    // function displayStartMessage() {
+    //     alert("Press any button to start")
+    // }
+
+    // displayStartMessage()
+
     function updateHighScore(score) { // highscore
         if (score > highScore) {
             highScore = score
@@ -213,6 +225,16 @@ function init() {
 
     //! PAGE LOAD
     createGrid()
+
+    setTimeout(displayStartMessage, 100)
     }
     
-    window.addEventListener('DOMContentLoaded', init)
+    window.addEventListener('DOMContentLoaded', function () {
+        init()
+
+        document.querySelector(".close").addEventListener("click", closeModal)
+
+        this.document.addEventListener("keydown", function () {
+            closeModal()
+        })
+    })
