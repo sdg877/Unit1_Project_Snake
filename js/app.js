@@ -5,6 +5,9 @@ function init() {
     
     const playAgainButton = document.querySelector(".playAgain")
 
+    let crunchSoundAudio = document.querySelector('#crunchSound')
+    crunchSoundAudio.src = './assets/apple.mp3'
+
     //! VARIABLES
     // board config
     const width = 15
@@ -19,7 +22,8 @@ function init() {
     const highScoreElement = document.getElementById('highScore')
     highScoreElement.textContent = highScore
     let snakeSpeed = 500
-    let currentScore = 0
+    
+ 
 
     //! FUNCTIONS
     function updateHighScore(score) { // highscore
@@ -28,6 +32,10 @@ function init() {
             localStorage.setItem('snakeHighScore' , highScore)
             highScoreElement.textContent = highScore
         }
+    }
+
+    function playCrunchSound() {
+        crunchSoundAudio.play()
     }
 
     function resetGame() { // resetting game after pressing play again button
@@ -78,8 +86,10 @@ function init() {
 
         if (snake.includes(newPosition) || newPosition < 0 || newPosition >= cellCount) {
             stopGame()
-            alert(`GAME OVER - YOU LOSE!! Your score is ${currentScore}`)
+            alert("GAME OVER - YOU LOSE!!")
             document.removeEventListener('keyup', handleMovement)
+            const currentScore = snake.length
+            updateHighScore(currentScore)
             return
         }
       
@@ -91,12 +101,14 @@ function init() {
             placeApple(generateRandomPosition())
             snake.unshift(currentPosition)
             cells[currentPosition].classList.add('snake')
+            crunchSoundAudio.play()
 
             snakeSpeed -= 25
             if (snakeSpeed < 250) {
                 snakeSpeed = 250
             }
-            currentScore += 1
+        
+            
         }
     
         setTimeout(moveSnake, snakeSpeed)
@@ -104,6 +116,7 @@ function init() {
 
     let applePosition = -1
     let snake = [0, 1] // store snake position as an array
+
     
     function placeApple(position){
         if (snake.includes(position)) {
@@ -187,7 +200,9 @@ function init() {
             placeApple(generateRandomPosition())
             snake.unshift(currentPosition)
             cells[currentPosition].classList.add('snake')
-    }   
+            crunchSoundAudio.play()
+            }   
+
     if (!gameRunning) {
         startGame()
     }
