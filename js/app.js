@@ -234,7 +234,7 @@ function init() {
 
         document.querySelector(".close").addEventListener("click", closeModal)
 
-        this.document.addEventListener("keydown", function () {
+        document.addEventListener("keydown", function () {
             closeModal()
         })
     })
